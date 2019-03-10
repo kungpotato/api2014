@@ -36,7 +36,7 @@ db = mongoose.connect(dbURI,{useNewUrlParser: true},function(err){
 var modelDepartment = require('./models/MasterDepartment');
 var modelMaterial = require('./models/MasterMaterial');
 var modelUnit = require('./models/MasterUnit');
-// var modelUser = require('./models/MasterUser');
+var modelUser = require('./models/MasterUser');
 
 
 var port = process.env.PORT || 3000;
@@ -96,13 +96,13 @@ app.get('/', function(req, res){
 DepartmentRouter = require('./Routes/deptRoutes')(modelDepartment)
 MaterialRouter = require('./Routes/materialRoutes')(modelMaterial)
 UnitRouter =  require('./Routes/unitRoutes')(modelUnit)
-// UserRouter =  require('./Routes/userRoutes')(modelUser)
+UserRouter =  require('./Routes/userRoutes')(modelUser)
 
 // app.use('/api/input', InputMaterialAndCostRouter);
 app.use('/api/department', DepartmentRouter);
 app.use('/api/material', MaterialRouter);
 app.use('/api/unit', UnitRouter);
-// app.use('/api/register', UserRouter);
+app.use('/api/register', UserRouter);
 // *******************************************
 
 
