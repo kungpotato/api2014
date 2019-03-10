@@ -33,8 +33,8 @@ db = mongoose.connect(dbURI,{useNewUrlParser: true},function(err){
 
 //  ********   Model define ***************
 // var modelInputMaterialAndCost = require('./models/InputMaterialAndCost');
-// var modelDepartment = require('./models/MasterDepartment');
-// var modelMaterial = require('./models/MasterMaterial');
+var modelDepartment = require('./models/MasterDepartment');
+var modelMaterial = require('./models/MasterMaterial');
 var modelUnit = require('./models/MasterUnit');
 // var modelUser = require('./models/MasterUser');
 
@@ -93,14 +93,14 @@ app.get('/', function(req, res){
 
 //  ********   Routes define ***************
 // InputMaterialAndCostRouter = require('./Routes/InputMaterialAndCostRoutes')(modelInputMaterialAndCost)
-// DepartmentRouter = require('./Routes/deptRoutes')(modelDepartment)
-// MaterialRouter = require('./Routes/materialRoutes')(modelMaterial)
+DepartmentRouter = require('./Routes/deptRoutes')(modelDepartment)
+MaterialRouter = require('./Routes/materialRoutes')(modelMaterial)
 UnitRouter =  require('./Routes/unitRoutes')(modelUnit)
 // UserRouter =  require('./Routes/userRoutes')(modelUser)
 
 // app.use('/api/input', InputMaterialAndCostRouter);
-// app.use('/api/department', DepartmentRouter);
-// app.use('/api/material', MaterialRouter);
+app.use('/api/department', DepartmentRouter);
+app.use('/api/material', MaterialRouter);
 app.use('/api/unit', UnitRouter);
 // app.use('/api/register', UserRouter);
 // *******************************************
