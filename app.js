@@ -30,29 +30,29 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    modelUser.findOne({ username: username }, function (err, user) {
-      //console.log(user)
-      if (err) { return done(err); }
-      if (!user) { return done(null, false); }
-      if (!user.verifyPassword(password)) { return done(null, false); }
+// passport.use(new LocalStrategy(
+//   function(username, password, done) {
+//     modelUser.findOne({ username: username }, function (err, user) {
+//       //console.log(user)
+//       if (err) { return done(err); }
+//       if (!user) { return done(null, false); }
+//       if (!user.verifyPassword(password)) { return done(null, false); }
 
-      return done(null, user);
-    });
-  }
-));
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-passport.deserializeUser(function(user, done) {
-  console.log('deserializeUser')
-  done(null, user);
-});
+//       return done(null, user);
+//     });
+//   }
+// ));
+// passport.serializeUser(function(user, done) {
+//   done(null, user);
+// });
+// passport.deserializeUser(function(user, done) {
+//   console.log('deserializeUser')
+//   done(null, user);
+// });
 
 var dbURI='mongodb://kungpotato:kungPRS2008@ds037283.mlab.com:37283/db_mfcaa';
 var db
@@ -70,18 +70,18 @@ db = mongoose.connect(dbURI,{useNewUrlParser: true},function(err){
 app.get('/', function(req, res){
     res.send('welcome to web API!');
 });
-app.post('/api/login',
-  passport.authenticate('local', { session: true }),
-  function(req, res) {
-    res.send(req.session.passport.user);
-  }
-);
-app.post('/api/logout', function (req, res) {
-  req.logout()
-  req.session.destroy(function (err) {
-    res.redirect("/")
-  })
-})
+// app.post('/api/login',
+//   passport.authenticate('local', { session: true }),
+//   function(req, res) {
+//     res.send(req.session.passport.user);
+//   }
+// );
+// app.post('/api/logout', function (req, res) {
+//   req.logout()
+//   req.session.destroy(function (err) {
+//     res.redirect("/")
+//   })
+// })
 
 //  ********   Model define ***************
 var modelInputMaterialAndCost = require('./models/InputMaterialAndCost');
