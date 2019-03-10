@@ -35,14 +35,14 @@ var port = process.env.PORT || 3000
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-// app.use(cookieParser())
-// app.use(session({
-//   name: 'JSESSION',
-//   secret: 'kungpotato',
-//   store: new MemoryStore(60 * 60 * 12),
-//   resave: true,
-//   saveUninitialized: true
-// }))
+app.use(cookieParser())
+app.use(session({
+  name: 'JSESSION',
+  secret: 'kungpotato',
+  store: new MemoryStore(60 * 60 * 12),
+  resave: true,
+  saveUninitialized: true
+}))
 // app.use(passport.initialize())
 // app.use(passport.session())
 
