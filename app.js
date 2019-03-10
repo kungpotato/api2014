@@ -22,19 +22,19 @@ db = mongoose.connect(dbURI,{useNewUrlParser: true},function(err){
 })
 
 //  ********   Model define ***************
-var modelInputMaterialAndCost = require('./models/InputMaterialAndCost');
-var modelDepartment = require('./models/MasterDepartment');
-var modelMaterial = require('./models/MasterMaterial');
-var modelUnit = require('./models/MasterUnit');
-var modelUser = require('./models/MasterUser');
+// var modelInputMaterialAndCost = require('./models/InputMaterialAndCost');
+// var modelDepartment = require('./models/MasterDepartment');
+// var modelMaterial = require('./models/MasterMaterial');
+// var modelUnit = require('./models/MasterUnit');
+// var modelUser = require('./models/MasterUser');
 
 var app = express();
-app.use(cors());
+// app.use(cors());
 
 var port = process.env.PORT || 3000;
 
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({extended:true}));
+// app.use(bodyParser.json());
 // app.use(cookieParser());
 // app.use(session({
 //   name: 'JSESSION',
@@ -91,11 +91,11 @@ app.get('/', function(req, res){
 // })
 
 //  ********   Routes define ***************
-InputMaterialAndCostRouter = require('./Routes/InputMaterialAndCostRoutes')(modelInputMaterialAndCost)
-DepartmentRouter = require('./Routes/deptRoutes')(modelDepartment)
-MaterialRouter = require('./Routes/materialRoutes')(modelMaterial)
-UnitRouter =  require('./Routes/unitRoutes')(modelUnit)
-UserRouter =  require('./Routes/userRoutes')(modelUser)
+// InputMaterialAndCostRouter = require('./Routes/InputMaterialAndCostRoutes')(modelInputMaterialAndCost)
+// DepartmentRouter = require('./Routes/deptRoutes')(modelDepartment)
+// MaterialRouter = require('./Routes/materialRoutes')(modelMaterial)
+// UnitRouter =  require('./Routes/unitRoutes')(modelUnit)
+// UserRouter =  require('./Routes/userRoutes')(modelUser)
 
 // app.use('/api/input', InputMaterialAndCostRouter);
 // app.use('/api/department', DepartmentRouter);
@@ -106,7 +106,7 @@ UserRouter =  require('./Routes/userRoutes')(modelUser)
 
 
 app.listen(port, function(){
-    console.log('Gulp is running my app on  PORT: ' + port);
+    console.log('app is running my app on  PORT: ' + port);
 });
 
 module.exports = app;
