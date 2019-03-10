@@ -1,7 +1,6 @@
 var express = require('express');
 
 var routes = function(User){
-	console.log(passport)
 
     var UserRouter = express.Router();
 
