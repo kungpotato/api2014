@@ -46,12 +46,12 @@ app.use(bodyParser.json());
 // app.use(passport.initialize());
 // app.use(passport.session());
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 
 // passport.use(new LocalStrategy(
 //   function(username, password, done) {
@@ -97,11 +97,11 @@ MaterialRouter = require('./Routes/materialRoutes')(modelMaterial)
 UnitRouter =  require('./Routes/unitRoutes')(modelUnit)
 UserRouter =  require('./Routes/userRoutes')(modelUser)
 
-app.use('/api/input', InputMaterialAndCostRouter);
-app.use('/api/department', DepartmentRouter);
-app.use('/api/material', MaterialRouter);
-app.use('/api/unit', UnitRouter);
-app.use('/api/register', UserRouter);
+// app.use('/api/input', InputMaterialAndCostRouter);
+// app.use('/api/department', DepartmentRouter);
+// app.use('/api/material', MaterialRouter);
+// app.use('/api/unit', UnitRouter);
+// app.use('/api/register', UserRouter);
 // *******************************************
 
 
