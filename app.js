@@ -7,7 +7,7 @@ var express = require('express'),
     session = require('express-session'),
     cookieParser = require('cookie-parser')
 
-var MemoryStore = require('session-memory-store')(session);
+// var MemoryStore = require('session-memory-store')(session);
 
 var app = express();
 app.use(cors());
@@ -19,6 +19,27 @@ app.use(function(req, res, next) {
   next();
 });
 
+var dbURI='mongodb://kungpotato:kungPRS2008@ds037283.mlab.com:37283/db_mfcaa';
+var db
+db = mongoose.connect(dbURI,{useNewUrlParser: true},function(err){    
+    if(err){
+    console.log('Some problem with the connection ' +err)   
+    } 
+    else {
+    console.log('The Mongoose connection is ready')  
+    }
+
+})
+
+//  ********   Model define ***************
+var modelInputMaterialAndCost = require('./models/InputMaterialAndCost');
+var modelDepartment = require('./models/MasterDepartment');
+var modelMaterial = require('./models/MasterMaterial');
+var modelUnit = require('./models/MasterUnit');
+var modelUser = require('./models/MasterUser');
+
+
+var port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
@@ -54,19 +75,6 @@ app.use(bodyParser.json());
 //   done(null, user);
 // });
 
-var dbURI='mongodb://kungpotato:kungPRS2008@ds037283.mlab.com:37283/db_mfcaa';
-var db
-db = mongoose.connect(dbURI,{useNewUrlParser: true},function(err){    
-    if(err){
-    console.log('Some problem with the connection ' +err)   
-    } 
-    else {
-    console.log('The Mongoose connection is ready')  
-    }
-
-})
-
-
 app.get('/', function(req, res){
     res.send('welcome to web API!');
 });
@@ -83,13 +91,6 @@ app.get('/', function(req, res){
 //   })
 // })
 
-//  ********   Model define ***************
-var modelInputMaterialAndCost = require('./models/InputMaterialAndCost');
-var modelDepartment = require('./models/MasterDepartment');
-var modelMaterial = require('./models/MasterMaterial');
-var modelUnit = require('./models/MasterUnit');
-var modelUser = require('./models/MasterUser');
-
 //  ********   Routes define ***************
 InputMaterialAndCostRouter = require('./Routes/InputMaterialAndCostRoutes')(modelInputMaterialAndCost)
 DepartmentRouter = require('./Routes/deptRoutes')(modelDepartment)
@@ -104,7 +105,7 @@ app.use('/api/unit', UnitRouter);
 app.use('/api/register', UserRouter);
 // *******************************************
 
-var port = process.env.PORT || 3000;
+
 app.listen(port, function(){
     console.log('app is running my app on  PORT: ' + port);
 });
