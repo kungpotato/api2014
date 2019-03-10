@@ -43,41 +43,41 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }))
-// app.use(passport.initialize())
-// app.use(passport.session())
+app.use(passport.initialize())
+app.use(passport.session())
 
-// passport.use(new LocalStrategy(
-//   (username, password, done) => {
-//     modelUser.findOne({ username: username }, (err, user) => {
-//       if (err) { return done(err) }
-//       if (!user) { return done(null, false) }
-//       if (!user.verifyPassword(password)) { return done(null, false) }
+passport.use(new LocalStrategy(
+  (username, password, done) => {
+    modelUser.findOne({ username: username }, (err, user) => {
+      if (err) { return done(err) }
+      if (!user) { return done(null, false) }
+      if (!user.verifyPassword(password)) { return done(null, false) }
 
-//       return done(null, user)
-//     })
-//   }
-// ))
-// passport.serializeUser((user, done) => {
-//   done(null, user)
-// })
-// passport.deserializeUser((user, done) => {
-//   console.log('deserializeUser')
-//   done(null, user)
-// })
+      return done(null, user)
+    })
+  }
+))
+passport.serializeUser((user, done) => {
+  done(null, user)
+})
+passport.deserializeUser((user, done) => {
+  console.log('deserializeUser')
+  done(null, user)
+})
 
 app.get('/', (req, res) => {
   res.send('welcome to web API!')
 })
-// app.post('/api/login',
-//   passport.authenticate('local', { session: true }),
-//   (req, res) => {
-//     res.send(req.session.passport.user)
-//   }
-// )
-// app.post('/api/logout', function (req, res) {
-//   req.logout()
-//   req.session.destroy()
-// })
+app.post('/api/login',
+  passport.authenticate('local', { session: true }),
+  (req, res) => {
+    res.send(req.session.passport.user)
+  }
+)
+app.post('/api/logout', function (req, res) {
+  req.logout()
+  req.session.destroy()
+})
 
 //  ********   Routes define ***************
 const InputMaterialAndCostRouter = require('./Routes/InputMaterialAndCostRoutes')(modelInputMaterialAndCost)
