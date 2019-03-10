@@ -7,7 +7,7 @@ var express = require('express'),
     session = require('express-session'),
     cookieParser = require('cookie-parser')
 
-// var MemoryStore = require('session-memory-store')(session);
+var MemoryStore = require('session-memory-store')(session);
 
 var app = express();
 app.use(cors());
@@ -17,6 +17,41 @@ app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
+});
+
+
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(session({
+  name: 'JSESSION',
+  secret: 'kungpotato',
+  store: new MemoryStore(60 * 60 * 12),
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    modelUser.findOne({ username: username }, function (err, user) {
+      //console.log(user)
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      if (!user.verifyPassword(password)) { return done(null, false); }
+
+      return done(null, user);
+    });
+  }
+));
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+  console.log('deserializeUser')
+  done(null, user);
 });
 
 var dbURI='mongodb://kungpotato:kungPRS2008@ds037283.mlab.com:37283/db_mfcaa';
@@ -31,81 +66,45 @@ db = mongoose.connect(dbURI,{useNewUrlParser: true},function(err){
 
 })
 
-//  ********   Model define ***************
-// var modelInputMaterialAndCost = require('./models/InputMaterialAndCost');
-// var modelDepartment = require('./models/MasterDepartment');
-// var modelMaterial = require('./models/MasterMaterial');
-var modelUnit = require('./models/MasterUnit');
-// var modelUser = require('./models/MasterUser');
-
-
-var port = process.env.PORT || 3000;
-
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(bodyParser.json());
-// app.use(cookieParser());
-// app.use(session({
-//   name: 'JSESSION',
-//   secret: 'kungpotato',
-//   store: new MemoryStore(60 * 60 * 12),
-//   resave: true,
-//   saveUninitialized: true
-// }));
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-
-// passport.use(new LocalStrategy(
-//   function(username, password, done) {
-//     modelUser.findOne({ username: username }, function (err, user) {
-//       //console.log(user)
-//       if (err) { return done(err); }
-//       if (!user) { return done(null, false); }
-//       if (!user.verifyPassword(password)) { return done(null, false); }
-
-//       return done(null, user);
-//     });
-//   }
-// ));
-// passport.serializeUser(function(user, done) {
-//   done(null, user);
-// });
-// passport.deserializeUser(function(user, done) {
-//   console.log('deserializeUser')
-//   done(null, user);
-// });
 
 app.get('/', function(req, res){
     res.send('welcome to web API!');
 });
-// app.post('/api/login',
-//   passport.authenticate('local', { session: true }),
-//   function(req, res) {
-//     res.send(req.session.passport.user);
-//   }
-// );
-// app.post('/api/logout', function (req, res) {
-//   req.logout()
-//   req.session.destroy(function (err) {
-//     res.redirect("/")
-//   })
-// })
+app.post('/api/login',
+  passport.authenticate('local', { session: true }),
+  function(req, res) {
+    res.send(req.session.passport.user);
+  }
+);
+app.post('/api/logout', function (req, res) {
+  req.logout()
+  req.session.destroy(function (err) {
+    res.redirect("/")
+  })
+})
+
+//  ********   Model define ***************
+var modelInputMaterialAndCost = require('./models/InputMaterialAndCost');
+var modelDepartment = require('./models/MasterDepartment');
+var modelMaterial = require('./models/MasterMaterial');
+var modelUnit = require('./models/MasterUnit');
+var modelUser = require('./models/MasterUser');
 
 //  ********   Routes define ***************
-// InputMaterialAndCostRouter = require('./Routes/InputMaterialAndCostRoutes')(modelInputMaterialAndCost)
-// DepartmentRouter = require('./Routes/deptRoutes')(modelDepartment)
-// MaterialRouter = require('./Routes/materialRoutes')(modelMaterial)
+InputMaterialAndCostRouter = require('./Routes/InputMaterialAndCostRoutes')(modelInputMaterialAndCost)
+DepartmentRouter = require('./Routes/deptRoutes')(modelDepartment)
+MaterialRouter = require('./Routes/materialRoutes')(modelMaterial)
 UnitRouter =  require('./Routes/unitRoutes')(modelUnit)
-// UserRouter =  require('./Routes/userRoutes')(modelUser)
+UserRouter =  require('./Routes/userRoutes')(modelUser)
 
-// app.use('/api/input', InputMaterialAndCostRouter);
-// app.use('/api/department', DepartmentRouter);
-// app.use('/api/material', MaterialRouter);
+app.use('/api/input', InputMaterialAndCostRouter);
+app.use('/api/department', DepartmentRouter);
+app.use('/api/material', MaterialRouter);
 app.use('/api/unit', UnitRouter);
-// app.use('/api/register', UserRouter);
+app.use('/api/register', UserRouter);
 // *******************************************
 
-
+var port = process.env.PORT || 3000;
 app.listen(port, function(){
     console.log('app is running my app on  PORT: ' + port);
 });
